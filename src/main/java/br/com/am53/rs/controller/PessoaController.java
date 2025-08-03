@@ -1,7 +1,10 @@
 package br.com.am53.rs.controller;
 
-import br.com.am53.rs.domain.Pessoa;
+import br.com.am53.rs.dto.PessoaAgeDTO;
 import br.com.am53.rs.dto.PessoaDTO;
+import br.com.am53.rs.dto.PessoaSalaryDTO;
+import br.com.am53.rs.enum_new.AgeOutputFormat;
+import br.com.am53.rs.enum_new.SalaryOutputFormat;
 import br.com.am53.rs.service.PessoaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +15,21 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/persons")
-//@Api(value = "API Pessoas", tags = {"pessoas"})
 public class PessoaController {
 
     private final PessoaService pessoaService;
 
     public PessoaController(PessoaService pessoaService) {
         this.pessoaService = pessoaService;
+    }
+
+    @GetMapping("/{id}/age")
+    public ResponseEntity<PessoaAgeDTO> getAge(
+            @PathVariable Long id,
+            @RequestParam(name = "output", defaultValue = "YEARS") AgeOutputFormat output) {
+
+        PessoaAgeDTO ageDto = pessoaService.calculateAge(id, output);
+        return ResponseEntity.ok(ageDto);
     }
 
     @PostMapping
@@ -41,29 +52,26 @@ public class PessoaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PessoaDTO> update(@PathVariable Long id, @RequestBody PessoaDTO pessoa) {
-        try {
-            return ResponseEntity.ok(pessoaService.update(id, pessoa));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(pessoaService.update(id, pessoa));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<PessoaDTO> patch(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
-        try {
-            return ResponseEntity.ok(pessoaService.patch(id, campos));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(pessoaService.patch(id, campos));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
-            pessoaService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        pessoaService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/salary")
+    public ResponseEntity<PessoaSalaryDTO> getSalary(
+            @PathVariable Long id,
+            @RequestParam(name = "output", defaultValue = "FULL") SalaryOutputFormat output) {
+
+        PessoaSalaryDTO salaryDto = pessoaService.calculateSalary(id, output);
+        return ResponseEntity.ok(salaryDto);
     }
 }

@@ -103,8 +103,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
-        // Em um ambiente de produção, é uma boa prática logar a exceção.
-        // log.error("Erro interno inesperado:", ex);
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", ZonedDateTime.now());
         body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());

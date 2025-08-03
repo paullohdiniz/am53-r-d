@@ -10,9 +10,6 @@ import java.util.stream.Collectors;
 @Component
 public class PessoaMapper {
 
-    /**
-     * Converte uma entidade Pessoa para um PessoaDTO.
-     */
     public PessoaDTO toDTO(Pessoa pessoa) {
         if (pessoa == null) {
             return null;
@@ -25,9 +22,6 @@ public class PessoaMapper {
         return dto;
     }
 
-    /**
-     * Converte um PessoaDTO para uma entidade Pessoa.
-     */
     public Pessoa toEntity(PessoaDTO dto) {
         if (dto == null) {
             return null;
@@ -40,9 +34,6 @@ public class PessoaMapper {
         return pessoa;
     }
 
-    /**
-     * Converte uma lista de entidades Pessoa para uma lista de PessoaDTO.
-     */
     public List<PessoaDTO> toDTOList(List<Pessoa> pessoas) {
         return pessoas.stream()
                 .map(this::toDTO)
